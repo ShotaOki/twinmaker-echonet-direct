@@ -1,18 +1,13 @@
-# bath-alarm-twinmaker
+# twinmaker-echonet-direct
 
 ## このプロジェクトについて
 
-このプロジェクトでは、SwichBot の防水温湿度センサーのデータを、iot-app-kit（TwinMaker）に連携するソリューションを提供します。
-
-また、iot-app-kit についての、以下の拡張機能を持ちます。
-
-- TwinMaker で構築した 3D シーンの`タグ`を MMD に置き換える機能を持ちます。
-- `タグ`の色変えのイベントを受け取って、MMD のモーション変更を行うことができます。
+このプロジェクトでは、TwinMakerの参照先をローカル環境のEchonet Liteに置き換えるソースコードを提供します。
 
 ## プロジェクトの構成
 
-- projects/python-sensor-gateway  
-  SiteWise に対してデータを送信するクライアントです
+- projects/direct-server 
+  SiteWise 互換のサービスをローカルで動かすためのアプリケーションです。
 - projects/react-web  
   iot-app-kit の React アプリケーションです
 
@@ -20,13 +15,14 @@
 
 Windows での開発を想定しています。
 
+※direct-serverの接続先はPicoGWを、Echonet Liteの環境にはMoekadenRoomを想定しています。PicoGWの動作にはUnix互換環境が必要です。
+
+https://github.com/KAIT-HEMS/node-picogw
+
+https://github.com/SonyCSL/MoekadenRoom
+
 利用規約の事情から、MMD モデル、モーションは git の管理対象に含めていません。  
 プロジェクトを clone された方が、正規の方法で MMD モデルをダウンロードして利用していただきますよう、お願いいたします。
-
-### デフォルトの設定
-
-- TwinMaker のタグの名称は、`Usada-Pekora`にしています。
-- モーション、リソースは、public ディレクトリに配置します。
 
 ## セットアップ
 
