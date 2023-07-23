@@ -1,7 +1,6 @@
 import "./App.css";
 import { initialize } from "@iot-app-kit/source-iottwinmaker";
 import { SceneViewer } from "@iot-app-kit/scene-composer";
-import { IoTSiteWiseClient } from "@aws-sdk/client-iotsitewise";
 import { IoTTwinMakerClient } from "@aws-sdk/client-iottwinmaker";
 import { useStore } from "@iot-app-kit/scene-composer/dist/src/store";
 import { useEffect, useMemo, useState } from "react";
@@ -16,13 +15,14 @@ import { stringToDefaultAnchorStatus } from "./twinmaker-extra/TwinMakerTagNames
 import { SystemLoadingStatus } from "./twinmaker-extra/DataType";
 
 function App() {
+  // 接続先対向環境をローカルに設定する
   const twinMakerClient = new IoTTwinMakerClient({
     endpoint: "http://localhost:8000",
-    region: "ap-northeast-1",
     credentials: {
       accessKeyId: "xxxxxxx",
       secretAccessKey: "xxxxxx",
     },
+    region: process.env.REACT_APP_AWS_REGION ?? "",
   });
 
   // TwinMakerのシーンを読み込む
