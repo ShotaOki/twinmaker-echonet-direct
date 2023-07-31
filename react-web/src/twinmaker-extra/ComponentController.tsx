@@ -5,6 +5,8 @@ import {
 import { ISceneNodeInternal } from "@iot-app-kit/scene-composer/dist/src/store";
 import { MMDModelWrapper } from "./MMDModelWrapper";
 import { SearchTagsCallback } from "./DataType";
+import { MeshUiButtonWrapper } from "./MeshUiButtonWrapper";
+import { MeshUiTextWrapper } from "./MeshUiTextWrapper";
 
 /**
  * タグを検索する
@@ -77,6 +79,57 @@ export function replaceTagToMMD(
   if (tag) {
     tag.visible = false;
     return new MMDModelWrapper(tag.position, tag.rotation, tag.scale, anchor);
+  }
+  return undefined;
+}
+
+/**
+ * TwinMakerのタグオブジェクトをボタンに置き換える
+ *
+ * @param ref タグオブジェクトのRef ID
+ * @param anchor タグオブジェクトのアンカー情報(位置、色、アイコン情報などが入っている)
+ * @param getObject3DBySceneNodeRef 関数: TwinMakerのノード情報からThree.jsのオブジェクトを参照する関数
+ * @returns MMDの管理クラス
+ */
+export function replaceTagToButton(
+  ref: string,
+  anchor: IAnchorComponent,
+  getObject3DBySceneNodeRef: (
+    ref: string | undefined
+  ) => THREE.Object3D<THREE.Event> | undefined
+) {
+  const tag = getObject3DBySceneNodeRef(ref);
+  if (tag) {
+    tag.visible = false;
+    return new MeshUiButtonWrapper(
+      tag.position,
+      tag.rotation,
+      tag.scale,
+      anchor
+    );
+  }
+  return undefined;
+}
+
+/**
+ * TwinMakerのタグオブジェクトをテキストに置き換える
+ *
+ * @param ref タグオブジェクトのRef ID
+ * @param anchor タグオブジェクトのアンカー情報(位置、色、アイコン情報などが入っている)
+ * @param getObject3DBySceneNodeRef 関数: TwinMakerのノード情報からThree.jsのオブジェクトを参照する関数
+ * @returns MMDの管理クラス
+ */
+export function replaceTagToText(
+  ref: string,
+  anchor: IAnchorComponent,
+  getObject3DBySceneNodeRef: (
+    ref: string | undefined
+  ) => THREE.Object3D<THREE.Event> | undefined
+) {
+  const tag = getObject3DBySceneNodeRef(ref);
+  if (tag) {
+    tag.visible = false;
+    return new MeshUiTextWrapper(tag.position, tag.rotation, tag.scale, anchor);
   }
   return undefined;
 }

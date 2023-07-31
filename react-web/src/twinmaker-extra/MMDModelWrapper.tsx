@@ -1,7 +1,7 @@
 import { ExtraObjectWrapper } from "./ExtraObjectWrapper";
 import * as THREE from "three";
 import { MMDLoader } from "three/examples/jsm/loaders/MMDLoader";
-import { SystemLoadingStatus } from "./DataType";
+import { AnimationParameter, SystemLoadingStatus } from "./DataType";
 import { degToRad } from "three/src/math/MathUtils";
 
 export interface MMDModelParameter {
@@ -39,6 +39,8 @@ export class MMDModelWrapper extends ExtraObjectWrapper {
   private _mixier?: THREE.AnimationMixer;
   // アニメーションのマップ
   private _motionMap?: { [key: string]: THREE.AnimationClip };
+  // タイマーループ
+  private _clock?: THREE.Clock;
 
   /**
    * 初期化する
@@ -123,15 +125,7 @@ export class MMDModelWrapper extends ExtraObjectWrapper {
       }
 
       // アニメーションを実行する
-      const clock = new THREE.Clock();
-      function animate() {
-        requestAnimationFrame(animate);
-
-        // アニメーションの状態を更新
-        const delta = clock.getDelta();
-        if (that._mixier) that._mixier.update(delta);
-      }
-      animate();
+      that._clock = new THREE.Clock();
     });
 
     return this;
@@ -176,5 +170,14 @@ export class MMDModelWrapper extends ExtraObjectWrapper {
   bindOnStateChangeEvent(stateChange: StateChangeEvent) {
     this._stateChange = stateChange;
     return this;
+  }
+
+  /** アニメーションループ */
+  executeAnimationLoop(parameter: AnimationParameter) {
+    // アニメーションの状態を更新
+    if (this._clock) {
+      const delta = this._clock.getDelta();
+      if (this._mixier) this._mixier.update(delta);
+    }
   }
 }

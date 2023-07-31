@@ -14,6 +14,7 @@ import {
 } from "@iot-app-kit/scene-composer/dist/src/utils/dataBindingUtils";
 import { searchTag } from "./ComponentController";
 import { SystemLoadingStatus } from "./DataType";
+import ThreeMeshUI from "three-mesh-ui";
 
 export enum SceneControllerState {
   Initialize,
@@ -27,11 +28,63 @@ export class SceneController {
   private _interface: ISceneFieldInterface;
   // Tagを置き換えたあとのオブジェクト管理インスタンス
   private _objects: { [key: string]: ExtraObjectWrapper };
+  // マウスクリック位置
+  private _mouse: THREE.Vector2 | null;
+  // レイキャスト
+  private _raycaster: THREE.Raycaster;
+  // 選択状態
+  private _selectState: boolean;
 
   constructor(composeId: string, sceneInterface: ISceneFieldInterface) {
     this._composerId = composeId;
     this._interface = sceneInterface;
     this._objects = {};
+    this._raycaster = new THREE.Raycaster();
+    this._selectState = false;
+    this._mouse = null;
+
+    window.addEventListener("pointermove", (event) => {
+      this._mouse = new THREE.Vector2();
+      this._mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this._mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    window.addEventListener("pointerdown", () => {
+      this._selectState = true;
+    });
+
+    window.addEventListener("pointerup", () => {
+      this._selectState = false;
+    });
+
+    window.addEventListener("touchstart", (event) => {
+      this._selectState = true;
+      this._mouse = new THREE.Vector2();
+      this._mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+      this._mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+    });
+
+    window.addEventListener("touchend", () => {
+      this._selectState = false;
+      this._mouse = null;
+    });
+
+    const that = this;
+    function animate() {
+      requestAnimationFrame(animate);
+
+      Object.keys(that._objects).forEach((k) => {
+        that._objects[k].executeAnimationLoop({
+          mouse: that._mouse,
+          isSelect: that._selectState,
+          raycaster: that._raycaster,
+        });
+      });
+
+      // アニメーションの状態を更新
+      ThreeMeshUI.update();
+    }
+    animate();
   }
 
   private searchRootScene(

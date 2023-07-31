@@ -53,3 +53,9 @@ AWS の認証情報、TwinMaker のシーン情報、SiteWise のデータ情報
 `npm run build`
 
 > ビルドして公開する際は、認証情報を.env からとるのではなく、Cognito から取るように変更してください
+
+### OSS の利用
+
+日本語フォントはこちらをお借りしています
+
+https://github.com/studioTeaTwo/aframe-japanese-font

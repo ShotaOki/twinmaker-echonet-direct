@@ -12,3 +12,9 @@ export namespace SystemLoadingStatus {
   export const Init: string = "init";
   export const UndefinedState: string = "undefined";
 }
+
+export interface AnimationParameter {
+  mouse: THREE.Vector2 | null;
+  isSelect: boolean;
+  raycaster: THREE.Raycaster;
+}

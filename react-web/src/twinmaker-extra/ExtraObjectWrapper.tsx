@@ -1,6 +1,6 @@
 import { IAnchorComponent } from "@iot-app-kit/scene-composer";
 import * as THREE from "three";
-import { SystemLoadingStatus } from "./DataType";
+import { AnimationParameter, SystemLoadingStatus } from "./DataType";
 
 export class ExtraObjectWrapper {
   // 表示位置
@@ -34,6 +34,9 @@ export class ExtraObjectWrapper {
   get isLoaded() {
     return this._flagLoaded;
   }
+
+  /** アニメーションループ */
+  executeAnimationLoop(parameter: AnimationParameter) {}
 
   /**
    * 状態を変更する
